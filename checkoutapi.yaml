@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: checkoutapi
+  version: 1.0.0
+  description: API description
+servers:
+- url: https://api.example.com/v1
+paths: {}
+components:
+  schemas: {}
