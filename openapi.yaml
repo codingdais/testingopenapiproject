@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: New API 222222222222222222222222222
+  title: New API
   version: 1.0.0
 paths:
   /oRR:
@@ -10,11 +10,19 @@ paths:
       tags: []
       responses:
         '200':
-          description: Successful response 222222
+          description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /abc:
+    get:
+      summary: GET /abc
+      operationId: getabc
+      tags: []
+      responses:
+        '200':
+          description: Successful response
 components:
   schemas:
     User:
