@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: New API
+  version: 1.0.0
+paths:
+  /oRR:
+    get:
+      summary: GET /oRR
+      operationId: getoRR
+      tags: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+      required:
+      - id
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        stock:
+          type: string
+        price:
+          type: string
+        u:
+          $ref: '#/components/schemas/User'
+      required:
+      - id
+  securitySchemes:
+    aaAAAA A:
+      type: apiKey
+      name: api _key
+      in: header
