@@ -1,0 +1,559 @@
+openapi: 3.0.3
+info:
+  title: Pet
+  version: 1.0.0
+  description: API description
+servers:
+- url: https://api.example.com/v1
+paths:
+  /testing:
+    get:
+      summary: GET /testing
+      operationId: gettesting
+      tags: []
+      responses:
+        '200':
+          description: Successful response
+      description: rrrrrrrr
+  /seconds:
+    get:
+      summary: GET /seconds
+      operationId: getseconds
+      tags: []
+      responses:
+        '200':
+          description: Successful response
+  /api/educators:
+    get:
+      summary: Retrieve a list of teachers and students
+      operationId: getTeachersAndStudents
+      tags:
+      - Educators
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      example:
+                        id: '12345'
+                        name: John Doe
+                        role: teacher
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        role:
+                          enum:
+                          - teacher
+                          - student
+                          type: string
+                      type: object
+                    type: array
+                  meta:
+                    example:
+                      limit: 10
+                      page: 1
+                      total: 100
+                    properties:
+                      limit:
+                        type: integer
+                      page:
+                        type: integer
+                      total:
+                        type: integer
+                    type: object
+                type: object
+          description: A list of teachers and students retrieved successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                example:
+                  error: Bad Request
+                  message: Invalid role specified.
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+          description: Invalid query parameters.
+        '500':
+          content:
+            application/json:
+              schema:
+                example:
+                  error: Internal Server Error
+                  message: An unexpected error occurred.
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+          description: Internal server error.
+      description: This endpoint retrieves a list of all teachers and students, with optional filtering and pagination.
+      parameters:
+      - description: The page number for pagination.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          type: integer
+      - description: The number of records to return per page.
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          type: integer
+      - description: Filter by role (teacher or student).
+        in: query
+        name: role
+        required: false
+        schema:
+          enum:
+          - teacher
+          - student
+          type: string
+    post:
+      summary: Create a new teacher or student
+      operationId: createTeacherOrStudent
+      tags:
+      - Educators
+      responses:
+        '200':
+          description: Successful response
+      delete:
+        description: This endpoint allows deletion of a teacher or student record.
+        operationId: deleteTeacherOrStudent
+        parameters:
+        - description: The ID of the teacher or student to delete.
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        responses:
+          '204':
+            description: The teacher or student was deleted successfully.
+          '404':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Not Found
+                    message: No teacher or student found with the given ID.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Teacher or student not found.
+          '500':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Internal Server Error
+                    message: An unexpected error occurred.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Internal server error.
+        summary: Delete a teacher or student
+        tags:
+        - Educators
+      description: This endpoint allows the creation of a new teacher or student record.
+      patch:
+        description: This endpoint allows partial updates to an existing teacher or student record.
+        operationId: partialUpdateTeacherOrStudent
+        parameters:
+        - description: The ID of the teacher or student to partially update.
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                example:
+                  name: Jane Smith
+                  role: student
+                properties:
+                  name:
+                    description: The name of the teacher or student.
+                    type: string
+                  role:
+                    description: The role of the user.
+                    enum:
+                    - teacher
+                    - student
+                    type: string
+                type: object
+          required: false
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  example:
+                    id: '67890'
+                    name: Jane Smith
+                    role: student
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    role:
+                      enum:
+                      - teacher
+                      - student
+                      type: string
+                  type: object
+            description: The teacher or student was partially updated successfully.
+          '404':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Not Found
+                    message: No teacher or student found with the given ID.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Teacher or student not found.
+          '500':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Internal Server Error
+                    message: An unexpected error occurred.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Internal server error.
+        summary: Partially update an existing teacher or student
+        tags:
+        - Educators
+      put:
+        description: This endpoint allows the update of an existing teacher or student record.
+        operationId: updateTeacherOrStudent
+        parameters:
+        - description: The ID of the teacher or student to update.
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                example:
+                  name: Jane Doe
+                  role: teacher
+                properties:
+                  name:
+                    description: The name of the teacher or student.
+                    type: string
+                  role:
+                    description: The role of the user.
+                    enum:
+                    - teacher
+                    - student
+                    type: string
+                type: object
+          required: true
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  example:
+                    id: '67890'
+                    name: Jane Doe
+                    role: teacher
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    role:
+                      enum:
+                      - teacher
+                      - student
+                      type: string
+                  type: object
+            description: The teacher or student was updated successfully.
+          '400':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Bad Request
+                    message: Name is required.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Invalid request body.
+          '404':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Not Found
+                    message: No teacher or student found with the given ID.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Teacher or student not found.
+          '500':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Internal Server Error
+                    message: An unexpected error occurred.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Internal server error.
+        summary: Update an existing teacher or student
+        tags:
+        - Educators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                name: Jane Smith
+                role: student
+              properties:
+                name:
+                  description: The name of the teacher or student.
+                  type: string
+                role:
+                  description: The role of the user.
+                  enum:
+                  - teacher
+                  - student
+                  type: string
+              required:
+              - name
+              - role
+              type: object
+        required: true
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  example:
+                    id: '67890'
+                    name: Jane Smith
+                    role: student
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    role:
+                      enum:
+                      - teacher
+                      - student
+                      type: string
+                  type: object
+            description: The teacher or student was created successfully.
+          '400':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Bad Request
+                    message: Name is required.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Invalid request body.
+          '500':
+            content:
+              application/json:
+                schema:
+                  example:
+                    error: Internal Server Error
+                    message: An unexpected error occurred.
+                  properties:
+                    error:
+                      type: string
+                    message:
+                      type: string
+                  type: object
+            description: Internal server error.
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: object
+          properties:
+            asss:
+              $ref: '#/components/schemas/global:User'
+      required:
+      - id
+    Order2:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    Second:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    StudentTeacherSchoolModel:
+      properties:
+        enrollmentDate:
+          description: Date when the student was enrolled
+          example: 2023-09-01T08:00:00Z
+          format: date-time
+          type: string
+        isActive:
+          description: Indicates if the student is actively enrolled
+          example: true
+          type: boolean
+        schoolId:
+          description: Unique identifier for the school
+          example: sch-abcde
+          maxLength: 15
+          minLength: 5
+          type: string
+        schoolName:
+          description: Full name of the school
+          example: Springfield High School
+          maxLength: 150
+          minLength: 1
+          type: string
+        studentId:
+          description: Unique identifier for the student
+          example: stu-12345
+          maxLength: 15
+          minLength: 5
+          type: string
+        studentName:
+          description: Full name of the student
+          example: John Doe
+          maxLength: 100
+          minLength: 1
+          type: string
+        teacherId:
+          description: Unique identifier for the teacher
+          example: teach-67890
+          maxLength: 15
+          minLength: 5
+          type: string
+        teacherName:
+          description: Full name of the teacher
+          example: Jane Smith
+          maxLength: 100
+          minLength: 1
+          type: string
+      required:
+      - studentId
+      - studentName
+      - teacherId
+      - teacherName
+      - schoolId
+      - schoolName
+      type: object
+    ModelPaymentAndCard:
+      properties:
+        amount:
+          description: The amount to be charged.
+          example: 99.99
+          maximum: 10000
+          minimum: 0.01
+          type: number
+        cardDetails:
+          description: Details of the payment card.
+          properties:
+            cardNumber:
+              description: The card number.
+              example: '1234567812345678'
+              pattern: ^[0-9]{16}$
+              type: string
+            cvv:
+              description: The CVV number of the card.
+              example: '123'
+              pattern: ^[0-9]{3,4}$
+              type: string
+            expiryDate:
+              description: The expiry date of the card in YYYY-MM format.
+              example: 2025-12
+              format: date-time
+              type: string
+          required:
+          - cardNumber
+          - expiryDate
+          - cvv
+          type: object
+        currency:
+          description: The currency of the payment amount.
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        email:
+          description: The email address associated with the payment.
+          example: user@example.com
+          format: email
+          type: string
+        paymentMethod:
+          description: The method used for payment.
+          enum:
+          - credit_card
+          - debit_card
+          - paypal
+          - bank_transfer
+          example: credit_card
+          type: string
+      required:
+      - paymentMethod
+      - amount
+      type: object
