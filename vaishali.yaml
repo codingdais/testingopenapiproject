@@ -1,0 +1,274 @@
+openapi: 3.0.3
+info:
+  title: vaishali
+  version: 1.0.0
+  description: API description
+servers:
+- url: https://api.example.com/v1
+paths:
+  /students:
+    delete:
+      summary: Delete a student
+      operationId: deleteStudent
+      tags:
+      - Students
+      responses:
+        '204':
+          description: Student deleted successfully.
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: Student not found.
+                    type: string
+                type: object
+          description: Student not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: An unexpected error occurred.
+                    type: string
+                type: object
+          description: Internal server error.
+      description: This endpoint deletes a student record by ID.
+      parameters:
+      - description: ID of the student to delete.
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 1
+          type: integer
+    get:
+      summary: Retrieve a list of students
+      operationId: getStudents
+      tags:
+      - Students
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                limit: 10
+                page: 1
+                students:
+                - age: 20
+                  grade: A
+                  id: 1
+                  name: John Doe
+                - age: 22
+                  grade: B
+                  id: 2
+                  name: Jane Smith
+                total: 100
+              schema:
+                properties:
+                  limit:
+                    example: 10
+                    type: integer
+                  page:
+                    example: 1
+                    type: integer
+                  students:
+                    items:
+                      $ref: '#/components/schemas/Student'
+                    type: array
+                  total:
+                    example: 100
+                    type: integer
+                type: object
+          description: A list of students.
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: Invalid query parameters.
+                    type: string
+                type: object
+          description: Bad request due to invalid parameters.
+        '500':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: An unexpected error occurred.
+                    type: string
+                type: object
+          description: Internal server error.
+      description: This endpoint fetches a list of students with optional pagination and filtering.
+      parameters:
+      - description: Page number for pagination.
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          type: integer
+      - description: Number of students to return per page.
+        in: query
+        name: limit
+        required: false
+        schema:
+          example: 10
+          type: integer
+    post:
+      summary: Create a new student
+      operationId: createStudent
+      tags:
+      - Students
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                age: 21
+                grade: A
+                id: 3
+                name: Alice Johnson
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: Student created successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: Invalid student data.
+                    type: string
+                type: object
+          description: Bad request due to invalid data.
+        '500':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: An unexpected error occurred.
+                    type: string
+                type: object
+          description: Internal server error.
+      description: This endpoint creates a new student record.
+      requestBody:
+        content:
+          application/json:
+            example:
+              age: 21
+              grade: A
+              name: Alice Johnson
+            schema:
+              $ref: '#/components/schemas/NewStudent'
+        required: true
+    put:
+      summary: Update an existing student
+      operationId: updateStudent
+      tags:
+      - Students
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                age: 21
+                grade: A+
+                id: 1
+                name: John Doe Updated
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: Student updated successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: Invalid student data.
+                    type: string
+                type: object
+          description: Bad request due to invalid data.
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: Student not found.
+                    type: string
+                type: object
+          description: Student not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    example: An unexpected error occurred.
+                    type: string
+                type: object
+          description: Internal server error.
+      description: This endpoint updates a student record by ID.
+      parameters:
+      - description: ID of the student to update.
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 1
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            example:
+              age: 21
+              grade: A+
+              name: John Doe Updated
+            schema:
+              $ref: '#/components/schemas/NewStudent'
+        required: true
+components:
+  schemas:
+    Student:
+      properties:
+        age:
+          description: Age of the student.
+          example: 20
+          maximum: 120
+          minimum: 0
+          type: integer
+        class:
+          description: Class or grade of the student.
+          example: 10th Grade
+          maxLength: 50
+          minLength: 1
+          type: string
+        id:
+          description: Unique identifier for the student.
+          example: '12345'
+          pattern: ^[0-9a-fA-F]{5}$
+          type: string
+        joined:
+          description: Date and time when the student joined.
+          example: 2023-09-01T12:00:00Z
+          format: date-time
+          type: string
+        name:
+          description: Full name of the student.
+          example: John Doe
+          maxLength: 100
+          minLength: 1
+          type: string
+      required:
+      - id
+      - name
+      - age
+      - class
+      - joined
+      type: object
