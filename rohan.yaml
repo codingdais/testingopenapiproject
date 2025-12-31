@@ -56,7 +56,7 @@ components:
       type: http
 info:
   contact:
-    email: support@example.com
+    email: rohandhiman@example.com
     name: API Support
     url: https://www.example.com/support
   description: API for managing teacher records, including creation, retrieval, updating, and deletion of teacher information.
